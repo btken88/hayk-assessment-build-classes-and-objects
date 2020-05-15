@@ -10,28 +10,34 @@ require 'pry'
 # A building should have a method returns the average number of tenants per floor
 
 class Building
-  attr_accessor :name, :tenant_count
+  attr_accessor :name, :number_of_tenants
   attr_reader :address
   @@all = []
 
-  def initialize name, address, floor_count, tenant_count
+  def initialize name, address, floor_count = 0, number_of_tenants = 0
     @name = name
     @address = address
     @floor_count = floor_count
-    @tenant_count = tenant_count
+    @number_of_tenants = number_of_tenants
     @@all << self
   end
 
+  def self.all
+    @@all
+  end
+
   def self.tenant_average
-    total_tenants = @@all.reduce(0) { |tenant_count, building| tenant_count + building.tenant_count}
-    total_tenants / @@all.length
+    total_tenants = @@all.reduce(0) do |tenant_count, building|
+      tenant_count + building.number_of_tenants
+    end
+    total_tenants / @@all.count
   end
 
   def placard
     "#{@name} - #{@address}"
   end
 
-  def tenants_per_floor
-    @tenant_count / @floor_count
+  def average_tenants_per_floor
+    @number_of_tenants / @floor_count.to_f
   end
 end
